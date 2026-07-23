@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Installs and configures HAProxy to load balance between web-01 and web-02
+
+set -e
+
+# Install HAProxy
+apt-get update -y
+apt-get install -y haproxy
+
+# Enable HAProxy via init script
+sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/haproxy
+
+# Add backend and frontend config for round robin load balancing
+cat >> /etc/haproxy/haproxy.cfg << EOC
+
+backend web_servers
+    balance roundrobin
+    server 7116-web-01 54.237.174.91:80 check
+    server 7116-web-02 3.84.79.105:80 check
+
+frontend http_front
+    bind *:80
+    default_backend web_servers
+EOC
+
+# Restart HAProxy to apply changes
+service haproxy restart

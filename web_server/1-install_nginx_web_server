@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Installs and configures Nginx web server on Ubuntu.
+
+# Update package list and install Nginx
+apt-get update -y
+apt-get install -y nginx
+
+# Ensure Nginx is running
+service nginx start
+
+# Create a custom index page
+echo "Holberton School for the win!" | tee /var/www/html/index.html
+
+# Restart Nginx (without systemctl)
+if pgrep nginx > /dev/null; then
+    service nginx reload
+else
+    service nginx start
+fi
+
