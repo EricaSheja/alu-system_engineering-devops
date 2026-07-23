@@ -7,8 +7,12 @@ set -e
 apt-get update -y
 apt-get install -y haproxy
 
-# Enable HAProxy via init script
-sed -i "s/ENABLED=0/ENABLED=1/" /etc/default/haproxy
+# Enable HAProxy via init script (works whether ENABLED already exists or not)
+if grep -q "^ENABLED=" /etc/default/haproxy; then
+    sed -i "s/^ENABLED=.*/ENABLED=1/" /etc/default/haproxy
+else
+    echo "ENABLED=1" >> /etc/default/haproxy
+fi
 
 # Add backend and frontend config for round robin load balancing
 cat >> /etc/haproxy/haproxy.cfg << EOC
@@ -25,3 +29,4 @@ EOC
 
 # Restart HAProxy to apply changes
 service haproxy restart
+
