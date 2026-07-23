@@ -4,7 +4,7 @@
 export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update -y
 sudo apt-get install -y nginx
-echo "add_header X-Served-By $HOSTNAME;" | sudo tee /etc/nginx/conf.d/custom_header.conf
+echo "add_header X-Served-By $(hostname);" | sudo tee /etc/nginx/conf.d/custom_header.conf
 sudo nginx -t
 sudo service nginx restart
 
