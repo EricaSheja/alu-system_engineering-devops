@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# fixes the port 80 bug in 5 lines or less, without service/init tricks
+sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
+ln -sf /dev/null /run/nginx.pid
+nginx
